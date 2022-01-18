@@ -1,0 +1,212 @@
+body {
+    background-color: #ebebea;
+}
+
+._app {
+    min-height: 800px;
+}
+
+.primary-lighter-hover {
+    color: #4285F4;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.primary-lighter-hover:hover {
+    -webkit-transition: .4s;
+    transition: .4s;
+    color: #8ab4f8;
+}
+
+.grey-darker-hover {
+    color: #616161;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.grey-darker-hover:hover {
+    -webkit-transition: .4s;
+    transition: .4s;
+    color: #3b3b3b;
+}
+
+html,
+body,
+._search_app,
+.view {
+    height: 100%;
+}
+._top_app_title {
+    margin: 230px auto;
+}
+
+.card._search_app {
+    width: 50em;
+    height: 10em;
+    margin: 130px auto;
+}
+
+.navbar-brand,
+._app_font {
+    font-family: Supercell-magic;
+    color: #fff;
+    text-shadow: -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    1px 1px 0 #000;
+}
+
+._card {
+    width: 90px;
+    height: 100px;
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+
+._elixir {
+    width: 25px;
+    height: 30px;
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+
+._small_icon {
+    width: 15px;
+    height: 15px;
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+
+._default_icon {
+    width: 20px;
+    height: 20px;
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+
+._normal_icon {
+    width: 25px;
+    height: 25px;
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+
+._medium_icon {
+    width: 30px;
+    height: 30px;
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+
+._large_icon {
+    width: 110px;
+    height: 120px;
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+._large2_icon {
+    width: 110px;
+    height: 110px;
+    background-size: 85%;
+    background-repeat: no-repeat;
+}
+
+
+
+._item {
+    font-size: 12px;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+._chest {
+    display: table;
+    width: 65px;
+    height: 70px;
+    margin-left: 4px;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    text-align: left;
+}
+
+._lv_icon {
+    width: 35px;
+    height: 35px;
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+._lv2_icon {
+    width: 40px;
+    height: 40px;
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+
+._rank_button.active {
+    border-bottom: solid 2px dodgerblue;
+}
+
+._chest p {
+    font-family: Supercell-magic;
+    font-size: 20px;
+    color: #fff;
+    display: table-cell;
+    vertical-align: bottom;
+    text-align: center;
+    margin-bottom: 5px;
+    text-shadow: -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    1px 1px 0 #000;
+}
+
+._active {
+    color: dodgerblue;
+    border-bottom: 2px solid dodgerblue;
+}
+
+._battle_font {
+    font-family: Supercell-magic;
+    color: #000;
+}
+._battle_card {
+    width: 40px;
+    height: 48px;
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+
+
+._battle_elixir {
+    width: 25px;
+    height: 30px;
+    background-size: 75%;
+    background-repeat: no-repeat;
+}
+
+._battle_blue {
+    background-color: #f0f7fe
+}
+
+._battle_red {
+    background-color: #fff8f9
+}
+
+._menu_item {
+    float: left;
+    min-width: 70px;
+    height: 35px;
+    margin-top: 12px;
+    margin-left: 10px;
+    text-align: center;
+}
+
+._menu_divide {
+    float: left;
+    width: 10px;
+    height: 10px;
+    margin-top: 16px;
+    border-right: 1px solid #DDDDDD;
+}
+
+

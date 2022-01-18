@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="info.fumbler.royalerumble.dao.AvatarDao">
+
+    <select id="selectOne" parameterType="String" resultType="Avatar">
+        SELECT *
+        FROM AVATARS
+        WHERE USER_NAME = #{userName}
+    </select>
+
+    <insert id="insert" parameterType="Avatar">
+        INSERT INTO AVATARS (USER_NAME, IMAGE)
+        values (#{userName}, #{image})
+    </insert>
+
+    <update id="update" parameterType="Avatar">
+        UPDATE AVATARS
+        SET IMAGE = #{image}
+        WHERE USER_NAME = #{userName}
+    </update>
+
+    <delete id="delete" parameterType="String">
+        DELETE FROM AVATARS
+        WHERE USER_NAME = #{userName}
+    </delete>
+
+    <update id="updateUserName" parameterType="Member">
+        UPDATE AVATARS SET
+        USER_NAME = #{newName}
+        WHERE USER_NAME = #{userName}
+    </update>
+
+</mapper>

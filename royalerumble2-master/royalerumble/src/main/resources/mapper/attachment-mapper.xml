@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="info.fumbler.royalerumble.dao.AttachmentDao">
+
+    <select id="getCount" resultType="int">
+        SELECT COUNT(*) FROM ATTACHMENTS
+        WHERE FORUM_ID = #{forumId}
+    </select>
+
+    <select id="selectOne" resultType="Attachment">
+        SELECT *
+        FROM ATTACHMENTS
+        WHERE ID = #{id}
+    </select>
+
+    <!--<select id="selectList" resultType="Attachment">-->
+        <!--SELECT ID, FORUM_ID, FILE_NAME, FILE_SIZE, MIME_TYPE, REG_DATE-->
+        <!--FROM ATTACHMENTS-->
+        <!--WHERE FORUM_ID = #{forumId}-->
+    <!--</select>-->
+    <select id="selectList" resultType="Attachment">
+        SELECT *
+        FROM ATTACHMENTS
+        WHERE FORUM_ID = #{forumId}
+    </select>
+
+    <insert id="insert" parameterType="Attachment">
+        INSERT INTO ATTACHMENTS
+        (ID, FORUM_ID,FILE_NAME,FILE_SIZE,MIME_TYPE, REG_DATE, FILE_BINARY)
+        VALUES
+        (ATTACHMENTS_SEQ.nextval, #{forumId}, #{fileName}, #{fileSize}, #{mimeType}, SYSDATE, #{fileBinary})
+    </insert>
+
+    <delete id="delete">
+        DELETE FROM ATTACHMENTS
+        WHERE ID = #{id}
+    </delete>
+
+    <delete id="deleteAll">
+        DELETE FROM ATTACHMENTS
+        WHERE FORUM_ID = #{id}
+    </delete>
+</mapper>

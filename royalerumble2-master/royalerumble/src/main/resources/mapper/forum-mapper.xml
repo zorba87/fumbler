@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="info.fumbler.royalerumble.dao.ForumDao">
+    <select id="getPageCount" parameterType="Params" resultType="int">
+        SELECT COUNT(*) AS TOTAL FROM FORUMS
+        WHERE TYPE = #{type}
+        <if test="keyword != ''">
+            <choose>
+                <when test="select == 1">
+                    AND SUBJECT LIKE '%'||#{keyword}||'%'
+                </when>
+                <when test="select == 2">
+                    AND SUBJECT LIKE '%'||#{keyword}||'%'
+                    OR CONTENT LIKE '%'||#{keyword}||'%'
+                </when>
+                <when test="select == 3">
+                    AND USER_NAME = #{keyword}
+                </when>
+            </choose>
+        </if>
+    </select>
+
+    <select id="selectOne" resultType="Forum">
+        SELECT * FROM FORUMS WHERE id = #{id}
+    </select>
+
+    <update id="increaseHits" parameterType="int">
+        UPDATE FORUMS
+        SET
+            HITS = HITS + 1
+        WHERE ID = #{id}
+    </update>
+
+    <select id="selectList" parameterType="Pagination" resultType="Forum">
+        SELECT
+        f.ID,
+        f.TYPE,
+        f.USER_NAME,
+        f.SUBJECT,
+        f.CONTENT,
+        f.REG_DATE,
+        f.MODIFIED,
+        f.ATTACHMENT_CHECK,
+        f.HITS,
+        c.COMMENT_CNT
+        FROM (SELECT ROW_NUMBER() OVER (ORDER BY ID DESC) AS SEQ,
+        ID,
+        USER_NAME,
+        TYPE,
+        SUBJECT,
+        CONTENT,
+        REG_DATE,
+        MODIFIED,
+        ATTACHMENT_CHECK,
+        HITS
+        FROM FORUMS WHERE TYPE = #{type}
+        <if test="keyword != ''">
+            <choose>
+                <when test="select == 1">
+                    AND SUBJECT LIKE '%'||#{keyword}||'%'
+                </when>
+                <when test="select == 2">
+                    AND SUBJECT LIKE '%'||#{keyword}||'%'
+                    OR TYPE = #{type} AND CONTENT LIKE'%'||#{keyword}||'%'
+                </when>
+                <when test="select == 3">
+                    AND USER_NAME = #{keyword}
+                </when>
+            </choose>
+        </if>
+        ) f,
+        (SELECT FORUM_ID, COUNT(*) COMMENT_CNT FROM COMMENTS GROUP BY FORUM_ID) c
+        WHERE f.SEQ BETWEEN #{start} AND #{end} AND f.ID = c.FORUM_ID(+)
+        ORDER BY ID DESC
+    </select>
+
+    <insert id="insert" parameterType="forum" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        INSERT INTO FORUMS (ID, USER_NAME, SUBJECT, CONTENT, HITS, TYPE, ATTACHMENT_CHECK)
+        VALUES (FORUM_SEQ.nextval, #{userName}, #{subject}, #{content}, #{hits}, #{insertType}, #{attachmentCheck})
+    </insert>
+
+    <update id="update" parameterType="forum">
+        UPDATE FORUMS SET
+        SUBJECT = #{subject},
+        CONTENT = #{content},
+        MODIFIED = 1,
+        ATTACHMENT_CHECK = #{attachmentCheck}
+        WHERE ID = #{id} AND USER_NAME = #{userName}
+    </update>
+
+    <update id="attachmentCheck" parameterType="Forum">
+        UPDATE FORUMS SET
+        ATTACHMENT_CHECK = #{attachmentCheck}
+        WHERE ID = #{id}
+    </update>
+
+    <update id="updateUserName" parameterType="Member">
+        UPDATE FORUMS SET
+        USER_NAME = #{newName}
+        WHERE USER_NAME = #{userName}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM FORUMS
+        WHERE ID = #{id}
+    </delete>
+
+</mapper>

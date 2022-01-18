@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="info.fumbler.royalerumble.dao.MemberDao">
+    <select id="selectOne" parameterType="String" resultType="Member">
+        SELECT * FROM MEMBERS WHERE EMAIL = #{email}
+    </select>
+
+    <select id="selectUserName" parameterType="String" resultType="Member">
+        SELECT * FROM MEMBERS WHERE USER_NAME = #{userName}
+    </select>
+
+    <insert id="insert" parameterType="Member" >
+        INSERT INTO MEMBERS (ID, EMAIL, USER_NAME, PASSWORD)
+        VALUES (MEMBERS_SEQ.nextval, #{email}, #{userName}, #{password})
+    </insert>
+
+    <update id="update" parameterType="Member" >
+        UPDATE MEMBERS SET
+        <choose>
+            <when test="newName != null">
+                USER_NAME = #{newName}
+                WHERE ID = #{id}
+            </when>
+            <when test="password != null">
+                PASSWORD = #{newPassword}
+                WHERE ID = #{id} AND PASSWORD = #{password}
+            </when>
+        </choose>
+    </update>
+
+    <select id="searchList" parameterType="String" resultType="String">
+        SELECT USER_NAME FROM MEMBERS WHERE USER_NAME LIKE #{userName}||'%'
+    </select>
+</mapper>

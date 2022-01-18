@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="info.fumbler.royalerumble.dao.CommentDao">
+    <select id="getCount" parameterType="long" resultType="int">
+        SELECT COUNT(*) AS TOTAL FROM COMMENTS
+        WHERE FORUM_ID = #{forumId}
+    </select>
+
+    <select id="getPageCount" parameterType="Params" resultType="int">
+        SELECT COUNT(*) AS TOTAL FROM COMMENTS
+        <choose>
+            <when test="ref != 0">
+                WHERE FORUM_ID = #{forumId} AND COMMENT_REF = #{ref}
+            </when>
+            <otherwise>
+                WHERE FORUM_ID = #{forumId} AND COMMENT_REF = 0
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="selectOne" resultType="Comment">
+      SELECT * FROM COMMENTS WHERE id = #{id}
+    </select>
+
+    <select id="selectList" parameterType="Pagination" resultType="Comment">
+        SELECT
+        c.ID,
+        c.FORUM_ID,
+        c.USER_NAME,
+        c.CONTENT,
+        r.COMMENT_CNT,
+        c.COMMENT_REF,
+        c.COMMENT_LEVEL,
+        c.REG_DATE
+        FROM (SELECT
+        <choose>
+            <when test="sort == 'like'">
+                ROW_NUMBER()
+                OVER (ORDER BY LIKE_CNT DESC, HATE_CNT ASC, ID DESC ) AS SEQ,
+            </when>
+            <when test="sort == 'hate'">
+                ROW_NUMBER()
+                OVER (ORDER BY HATE_CNT DESC, LIKE_CNT ASC, ID DESC ) AS SEQ,
+            </when>
+            <otherwise>
+                ROW_NUMBER()
+                OVER(ORDER BY ID DESC) AS SEQ,
+            </otherwise>
+        </choose>
+        ID,
+        FORUM_ID,
+        USER_NAME,
+        CONTENT,
+        COMMENT_REF,
+        COMMENT_LEVEL,
+        REG_DATE
+        FROM COMMENTS
+        WHERE FORUM_ID = #{forumId} AND COMMENT_REF = 0) c,
+        (SELECT COMMENT_REF, COUNT(*) COMMENT_CNT
+        FROM COMMENTS WHERE NOT COMMENT_REF = 0 GROUP BY COMMENT_REF) r
+        WHERE SEQ BETWEEN #{start} AND #{end} AND c.ID = r.COMMENT_REF(+)
+        <choose>
+            <when test="sort == 'like'">
+                ORDER BY LIKE_CNT DESC, HATE_CNT ASC, ID DESC
+            </when>
+            <when test="sort == 'hate'">
+                ORDER BY HATE_CNT DESC, LIKE_CNT ASC, ID DESC
+            </when>
+            <otherwise>
+                ORDER BY ID DESC
+            </otherwise>
+        </choose>
+    </select>
+    <select id="selectListReply" parameterType="Pagination" resultType="Comment">
+        SELECT
+        ID,
+        FORUM_ID,
+        USER_NAME,
+        CONTENT,
+        COMMENT_REF,
+        COMMENT_LEVEL,
+        REG_DATE
+        FROM (SELECT
+                ROW_NUMBER()
+                OVER(ORDER BY ID ASC) AS SEQ,
+        ID,
+        FORUM_ID,
+        USER_NAME,
+        CONTENT,
+        COMMENT_REF,
+        COMMENT_LEVEL,
+        REG_DATE
+        FROM COMMENTS
+        WHERE FORUM_ID = #{forumId} AND COMMENT_REF = #{commentRef}
+        ) WHERE SEQ BETWEEN #{start} AND #{end}
+    </select>
+
+    <insert id="insert" parameterType="Comment">
+        INSERT INTO COMMENTS (
+        ID, FORUM_ID, USER_NAME, CONTENT,
+        COMMENT_REF, COMMENT_LEVEL, LIKE_CNT, HATE_CNT)
+        VALUES (COMMENTS_SEQ.NEXTVAL, #{forumId}, #{userName}, #{content},
+        #{commentRef}, #{commentLevel}, 0, 0)
+    </insert>
+
+    <update id="updateUserName" parameterType="Member">
+        UPDATE COMMENTS SET
+        USER_NAME = #{newName}
+        WHERE USER_NAME = #{userName}
+    </update>
+
+    <delete id="deleteAll">
+        DELETE FROM COMMENTS
+        WHERE FORUM_ID = #{id}
+    </delete>
+</mapper>
